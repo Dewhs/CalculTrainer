@@ -32,13 +32,31 @@ val Heading2 = TextStyle(
     color = Dark
 )
 
-val Heading2_Btn = TextStyle(
+val Heading2_Btn_Chill = TextStyle(
     fontFamily = Poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 18.sp,
     lineHeight = 24.sp,
     letterSpacing = 0.5.sp,
     color = Chill_Dark
+)
+
+val Heading2_Btn_Training = TextStyle(
+    fontFamily = Poppins,
+    fontWeight = FontWeight.Medium,
+    fontSize = 18.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp,
+    color = Training_Dark
+)
+
+val Heading2_Btn_Infinite = TextStyle(
+    fontFamily = Poppins,
+    fontWeight = FontWeight.Medium,
+    fontSize = 18.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp,
+    color = Infinite_Dark
 )
 
 
