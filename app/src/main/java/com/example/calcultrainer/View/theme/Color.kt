@@ -11,6 +11,7 @@ val Chill_Dark = Color(0xFF40804B)
 val Training_Dark = Color(0xFF405A80)
 val Infinite_Dark = Color(0xFF804040)
 val Light = Color(0xFFFFFFFF)
+val LightGray = Color(0xFFD9D9D9)
 
 /*val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

@@ -127,6 +127,7 @@ fun HomePage(NavigateToCalculPage: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.size(10.dp))
                     BasicText(
+                        modifier = Modifier.padding(top = 3.dp),
                         text = "Start ${Levels[pagerState.currentPage].name}",
                         style = Levels[pagerState.currentPage].Heading2_btn
                     )
@@ -148,7 +149,7 @@ fun Btn_Caroussel_Mode(
     pagerState: PagerState
 ) {
     var opacity = 0.5
-    var pageDestination = 0;
+    var pageDestination = 0
 
     if (Levels[pagerState.currentPage].name == level.name) {
         opacity = 1.0
@@ -161,7 +162,7 @@ fun Btn_Caroussel_Mode(
         pageDestination = 1
     }
     if (level.name == "Infinite") {
-        pageDestination = 2
+        pageDestination = 2 
     }
 
 
