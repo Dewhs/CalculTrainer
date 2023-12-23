@@ -1,5 +1,15 @@
 package com.example.calcultrainer.View
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.EaseInOutBack
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -118,16 +128,37 @@ fun CustomNumberInput() {
                         Box(
                             modifier = Modifier.fillMaxSize(),
 
-                        ) {
-                            BasicText(text = nb, style = Heading1, modifier = Modifier.align(
-                                Alignment.Center))
-                            Box(modifier = Modifier
-                                .height(isVisible * 10.dp)
-                                .width(25.dp)
-                                .background(Dark)
-                                .align(alignment = Alignment.BottomCenter)
-                                .padding(start = 0.dp, end = 0.dp, top = 0.dp, bottom = 15.dp)
+                            ) {
+                            BasicText(
+                                text = nb, style = Heading1, modifier = Modifier.align(
+                                    Alignment.Center
+                                )
                             )
+                            Box(
+                                modifier = Modifier
+                                    .height(isVisible * 25.dp)
+                                    .fillMaxWidth()
+                                    .align(alignment = Alignment.BottomCenter)
+
+                            ) {
+                                val infiniteTransition = rememberInfiniteTransition()
+                                val color by infiniteTransition.animateColor(
+                                    initialValue = Light,
+                                    targetValue = Dark,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(500, easing = EaseIn),
+                                        repeatMode = RepeatMode.Reverse
+                                    ), label = ""
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .height(5.dp)
+                                        .width(20.dp)
+                                        .background(color)
+                                        .align(alignment = Alignment.Center)
+                                )
+
+                            }
 
                         }
                     }
