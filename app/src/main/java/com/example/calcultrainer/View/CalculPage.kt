@@ -1,10 +1,8 @@
 package com.example.calcultrainer.View
 
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseInOut
-import androidx.compose.animation.core.EaseInOutBack
-import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
@@ -21,17 +19,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,29 +39,34 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.calcultrainer.View.theme.Dark
 import com.example.calcultrainer.View.theme.Heading1
-import com.example.calcultrainer.View.theme.Heading2
+import com.example.calcultrainer.View.theme.Heading4
 import com.example.calcultrainer.View.theme.Light
 import com.example.calcultrainer.View.theme.LightGray
-import com.example.calcultrainer.View.theme.ResultStyle
+import com.example.calcultrainer.ViewModel.CalculPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun CalculPage() {
+fun CalculPage(
+    viewModel: CalculPageViewModel = viewModel()
+) {
+
     val keyboardController = LocalSoftwareKeyboardController.current
     var result by remember { mutableStateOf("") }
+
+    var equal by remember { mutableStateOf(false)}
 
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-        //.background(Color.Red)
     ) {
 
 
-        BasicText(text = "587 + 342", style = Heading1)
+        BasicText(text = viewModel.calcul, style = Heading1)
         Spacer(modifier = Modifier.size(15.dp))
         Box(
             modifier = Modifier
@@ -76,14 +75,105 @@ fun CalculPage() {
                 .width(350.dp),
         )
         Spacer(modifier = Modifier.size(25.dp))
-        CustomNumberInput()
+        
+        //CustomNumberInput()
+
+        val size = viewModel.resultSize
+
+        BasicTextField(
+            value = result,
+            singleLine = true,
+            onValueChange = { newValue ->
+                if (newValue.length <= size) {
+                    result = newValue
+                }
+                if (newValue.length == size) {
+                    equal = viewModel.checkResult(result.toInt())
+                    result = ""
+                }
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                repeat(size) { index ->
+                    var borderSize = 1
+                    var isVisible = 0
+                    val nb = when {
+                        index >= result.length -> ""
+                        else -> result[index].toString()
+                    }
+                    if (index == result.length) {
+                        borderSize = 3
+                        isVisible = 1
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Box(
+                            modifier = Modifier
+                                .border(
+                                    BorderStroke(borderSize.dp, Dark),
+                                    shape = RoundedCornerShape(30)
+                                )
+                                .height(50.dp)
+                                .width(40.dp)
+                                .background(Light)
+                        ){
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+
+                                ) {
+                                BasicText(
+                                    text = nb, style = Heading1, modifier = Modifier.align(
+                                        Alignment.BottomCenter
+                                    )
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .height(isVisible * 25.dp)
+                                        .fillMaxWidth()
+                                        .align(alignment = Alignment.BottomCenter)
+
+                                ) {
+                                    val infiniteTransition = rememberInfiniteTransition(label = "")
+                                    val color by infiniteTransition.animateColor(
+                                        initialValue = Light,
+                                        targetValue = Dark,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(500, easing = EaseIn),
+                                            repeatMode = RepeatMode.Reverse
+                                        ), label = ""
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .height(5.dp)
+                                            .width(20.dp)
+                                            .background(color)
+                                            .align(alignment = Alignment.Center)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.size(25.dp))
+        BasicText(text = equal.toString(), style = Heading4)
 
     }
 }
 
-@Composable
-fun CustomNumberInput() {
-    val size = 3
+
+
+/*@Composable
+fun CustomNumberInput(viewModel: CalculPageViewModel = viewModel()) {
+    val size = viewModel.resultSize
+    //val calculPageViewModel by CalculPageViewModel.partyState.collectAsState()
+
     var result by remember { mutableStateOf("") }
 
     BasicTextField(
@@ -92,6 +182,10 @@ fun CustomNumberInput() {
         onValueChange = { newValue ->
             if (newValue.length <= size) {
                 result = newValue
+            }
+            if (newValue.length == size) {
+                viewModel.checkResult(result.toInt())
+                result = ""
             }
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -131,7 +225,7 @@ fun CustomNumberInput() {
                             ) {
                             BasicText(
                                 text = nb, style = Heading1, modifier = Modifier.align(
-                                    Alignment.Center
+                                    Alignment.BottomCenter
                                 )
                             )
                             Box(
@@ -141,7 +235,7 @@ fun CustomNumberInput() {
                                     .align(alignment = Alignment.BottomCenter)
 
                             ) {
-                                val infiniteTransition = rememberInfiniteTransition()
+                                val infiniteTransition = rememberInfiniteTransition(label = "")
                                 val color by infiniteTransition.animateColor(
                                     initialValue = Light,
                                     targetValue = Dark,
@@ -169,4 +263,4 @@ fun CustomNumberInput() {
 
 
     }
-}
+}*/
