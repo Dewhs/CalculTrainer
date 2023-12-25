@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -20,11 +21,12 @@ import com.example.calcultrainer.View.HomePage
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window,false)
         setContent {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "home"){
                 composable("home") { HomePage(NavigateToCalculPage = {navController.navigate("calculPage")})}
-                composable("calculPage") {CalculPage()}
+                composable("calculPage") {CalculPage(navController)}
             }
         }
     }

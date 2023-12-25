@@ -60,14 +60,14 @@ fun HomePage(NavigateToCalculPage: () -> Unit) {
     Column(
         modifier = Modifier
             .background(Light)
-            .fillMaxSize()
-            .padding(top = 80.dp, bottom = 40.dp),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 120.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_without_font),
@@ -133,6 +133,7 @@ fun HomePage(NavigateToCalculPage: () -> Unit) {
                     )
                 }
             }
+            Spacer(modifier = Modifier.padding(40.dp))
 
 
         }
