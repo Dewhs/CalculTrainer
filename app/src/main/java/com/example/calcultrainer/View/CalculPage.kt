@@ -1,5 +1,6 @@
 package com.example.calcultrainer.View
 
+import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
@@ -26,6 +27,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
@@ -38,10 +42,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -52,14 +58,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.calcultrainer.Model.msgHistorique
 import com.example.calcultrainer.R
+import com.example.calcultrainer.View.theme.Chill
 import com.example.calcultrainer.View.theme.Dark
 import com.example.calcultrainer.View.theme.Heading1
+import com.example.calcultrainer.View.theme.Heading2
+import com.example.calcultrainer.View.theme.Heading3
 import com.example.calcultrainer.View.theme.Heading4
+import com.example.calcultrainer.View.theme.Infinite
 import com.example.calcultrainer.View.theme.Light
 import com.example.calcultrainer.View.theme.LightGray
+import com.example.calcultrainer.View.theme.false_msgHistorique_H
+import com.example.calcultrainer.View.theme.true_msgHistorique_H
 import com.example.calcultrainer.ViewModel.CalculPageViewModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.format.TextStyle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -67,11 +83,22 @@ fun CalculPage(
     navHostController: NavHostController,
     viewModel: CalculPageViewModel = viewModel()
 ) {
-
     val keyboardController = LocalSoftwareKeyboardController.current
     var result by remember { mutableStateOf("") }
 
     var equal by remember { mutableStateOf(false) }
+    val listSate = rememberLazyListState()
+
+    val listCorrection: List<msgHistorique> = viewModel.correction
+
+    val focusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(focusRequester) {
+        focusRequester.requestFocus()
+
+    }
+
+
 
     Column(
         modifier = Modifier
@@ -113,11 +140,9 @@ fun CalculPage(
             //CustomNumberInput()
 
             val size = viewModel.resultSize
-            val focusRequester = remember { FocusRequester() }
 
-            LaunchedEffect(focusRequester) {
-                focusRequester.requestFocus()
-            }
+
+
 
 
             BasicTextField(
@@ -133,8 +158,12 @@ fun CalculPage(
                         if (newValue.length == size) {
                             equal = viewModel.checkResult(result.toInt())
                             result = ""
+                            coroutineScope.launch {
+                                listSate.animateScrollToItem(index = listCorrection.size)
+                            }
                         }
                     }
+
                 },
                 modifier = Modifier.focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -142,6 +171,7 @@ fun CalculPage(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+
                     repeat(size) { index ->
                         var borderSize = 1
                         var isVisible = 0
@@ -209,13 +239,68 @@ fun CalculPage(
             }
         }
 
-        BasicText(
+        /*BasicText(
             text = equal.toString(),
             style = Heading4,
             modifier = Modifier
                 .imePadding()
                 .align(Alignment.End)
-        )
+        )*/
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(5.dp),
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier
+                .imePadding()
+                .align(Alignment.End)
+                .height(150.dp),
+            state = listSate,
+        ) {
+            items(listCorrection) { _msgHistorique ->
+
+                //BasicText(text = correct, style = Heading3)
+                printMsgHistorique(msg = _msgHistorique)
+            }
+        }
     }
 }
 
+
+@Composable
+fun printMsgHistorique(msg: msgHistorique) {
+    var color: Color = LightGray
+    var style: androidx.compose.ui.text.TextStyle = Heading3
+
+    if (!msg.isCorrection) {
+        if (msg.isTrue) {
+            color = Chill
+            style = true_msgHistorique_H
+        } else {
+            color = Infinite
+            style = false_msgHistorique_H
+        }
+    }
+
+    Box(
+        modifier = Modifier.clip(RoundedCornerShape(100.dp)).background(color)
+    )
+    {
+        BasicText(text = msg.value, style = style, modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp))
+    }
+
+    /*Box(
+        modifier = Modifier
+            .size(100.dp)
+            .border(
+                border = BorderStroke(1.dp, color),
+                RoundedCornerShape(100.dp)
+            )
+            .background(Color.Red)
+
+    )
+    {
+        BasicText(text = msg.value, style = style, modifier = Modifier.padding(10.dp))
+    }*/
+
+
+}

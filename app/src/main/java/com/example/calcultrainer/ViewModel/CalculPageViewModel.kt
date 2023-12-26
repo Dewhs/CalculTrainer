@@ -1,28 +1,20 @@
 package com.example.calcultrainer.ViewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.calcultrainer.Model.Party
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.calcultrainer.Model.msgHistorique
 import kotlin.random.Random
 
 class CalculPageViewModel() : ViewModel() {
-
-    private val _partyState = MutableStateFlow(Party())
-    val partyState: StateFlow<Party> = _partyState
-
 
     private var _score = 0
     private var _calcul = "+"
     private var _realResult = 9
     private var _resultSize = 1
+    private var _correction: List<msgHistorique> = emptyList()
 
     init {
         launchParty()
     }
-
 
 
     val score: Int
@@ -36,13 +28,28 @@ class CalculPageViewModel() : ViewModel() {
     val resultSize: Int
         get() = _resultSize
 
-    fun checkResult(result: Int) : Boolean {
+    val correction: List<msgHistorique>
+        get() = _correction
+
+    fun checkResult(result: Int): Boolean {
 
         val checkValue = (result == realResult)
         println(checkValue)
+        var newMsg: msgHistorique =
+            msgHistorique(value = "$calcul = $result ", isTrue = checkValue, isCorrection = false)
+        _correction += newMsg
+        if (!checkValue) {
+            var newMsg1: msgHistorique = msgHistorique(
+                value = "$calcul = $realResult ",
+                isTrue = checkValue,
+                isCorrection = true
+            )
+            _correction += newMsg1
+        }
+
         generateCalcul()
 
-        return  checkValue
+        return checkValue
     }
 
 
@@ -52,7 +59,7 @@ class CalculPageViewModel() : ViewModel() {
     }
 
     fun generateCalcul() {
-        val int1 = Random.nextInt(0,100)
+        val int1 = Random.nextInt(0, 100)
         val int2 = Random.nextInt(0, 100)
         _calcul = "$int1 + $int2"
         _realResult = int1 + int2

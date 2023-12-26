@@ -80,6 +80,23 @@ val Heading3 = TextStyle(
     color = Dark
 )
 
+val false_msgHistorique_H = TextStyle(
+    fontFamily = Poppins,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp,
+    color = Infinite_Dark
+)
+
+val true_msgHistorique_H = TextStyle(
+    fontFamily = Poppins,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp,
+    color = Chill_Dark
+)
 
 val Heading4 = TextStyle(
     fontFamily = Poppins,
