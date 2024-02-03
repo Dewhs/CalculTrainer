@@ -11,6 +11,7 @@ class CalculPageViewModel() : ViewModel() {
     private var _realResult = 9
     private var _resultSize = 1
     private var _correction: List<msgHistorique> = emptyList()
+    private var _level : Int = 10
 
     init {
         launchParty()
@@ -31,6 +32,10 @@ class CalculPageViewModel() : ViewModel() {
     val correction: List<msgHistorique>
         get() = _correction
 
+    val level: Int
+        get() = _level
+
+
     fun checkResult(result: Int): Boolean {
 
         val checkValue = (result == realResult)
@@ -45,6 +50,17 @@ class CalculPageViewModel() : ViewModel() {
                 isCorrection = true
             )
             _correction += newMsg1
+            if (_level > 1)
+            {
+                _level--
+            }
+
+        }
+        else{
+            if (_level < 100000)
+            {
+                _level++
+            }
         }
 
         generateCalcul()
@@ -59,8 +75,8 @@ class CalculPageViewModel() : ViewModel() {
     }
 
     fun generateCalcul() {
-        val int1 = Random.nextInt(0, 100)
-        val int2 = Random.nextInt(0, 100)
+        val int1 = Random.nextInt(0, 2*_level)
+        val int2 = Random.nextInt(0, 2*_level)
         _calcul = "$int1 + $int2"
         _realResult = int1 + int2
         _resultSize = realResult.toString().length

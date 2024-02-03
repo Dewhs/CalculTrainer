@@ -149,15 +149,14 @@ fun CalculPage(
                 value = result,
                 singleLine = true,
                 onValueChange = { newValue ->
-                    if (newValue.length <= size && !newValue.contains(" ") && !newValue.contains("-") && !newValue.contains(
-                            ","
-                        ) && !newValue.contains(".")
-                    ) {
+                    if (newValue.length <= size && !newValue.contains(" ") && !newValue.contains("-") && !newValue.contains(",") && !newValue.contains(".")) {
                         result = newValue
 
                         if (newValue.length == size) {
                             equal = viewModel.checkResult(result.toInt())
                             result = ""
+
+
                             coroutineScope.launch {
                                 listSate.animateScrollToItem(index = listCorrection.size)
                             }
@@ -247,19 +246,23 @@ fun CalculPage(
                 .align(Alignment.End)
         )*/
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(5.dp),
-            horizontalAlignment = Alignment.End,
-            modifier = Modifier
-                .imePadding()
-                .align(Alignment.End)
-                .height(150.dp),
-            state = listSate,
-        ) {
-            items(listCorrection) { _msgHistorique ->
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
+            BasicText(modifier = Modifier.imePadding(),text = "Level : ${viewModel.level}", style = Heading2)
 
-                //BasicText(text = correct, style = Heading3)
-                printMsgHistorique(msg = _msgHistorique)
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier
+                    .imePadding()
+                    //.align(Alignment.End)
+                    .height(150.dp),
+                state = listSate,
+            ) {
+                items(listCorrection) { _msgHistorique ->
+
+                    //BasicText(text = correct, style = Heading3)
+                    printMsgHistorique(msg = _msgHistorique)
+                }
             }
         }
     }
@@ -282,10 +285,16 @@ fun printMsgHistorique(msg: msgHistorique) {
     }
 
     Box(
-        modifier = Modifier.clip(RoundedCornerShape(100.dp)).background(color)
+        modifier = Modifier
+            .clip(RoundedCornerShape(100.dp))
+            .background(color)
     )
     {
-        BasicText(text = msg.value, style = style, modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp))
+        BasicText(
+            text = msg.value,
+            style = style,
+            modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
+        )
     }
 
     /*Box(
