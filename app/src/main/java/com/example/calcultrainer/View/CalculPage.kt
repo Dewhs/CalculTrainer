@@ -1,10 +1,7 @@
 package com.example.calcultrainer.View
 
-import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -13,13 +10,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,7 +30,6 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +59,6 @@ import com.example.calcultrainer.View.theme.Dark
 import com.example.calcultrainer.View.theme.Heading1
 import com.example.calcultrainer.View.theme.Heading2
 import com.example.calcultrainer.View.theme.Heading3
-import com.example.calcultrainer.View.theme.Heading4
 import com.example.calcultrainer.View.theme.Infinite
 import com.example.calcultrainer.View.theme.Light
 import com.example.calcultrainer.View.theme.LightGray
@@ -91,15 +84,15 @@ fun CalculPage(
 
     val listCorrection: List<msgHistorique> = viewModel.correction
 
-    val focusRequester = remember { FocusRequester() }
+    val focusRequester = remember {
+        FocusRequester()
+    }
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(focusRequester) {
         focusRequester.requestFocus()
 
     }
-
-
-
+    
     Column(
         modifier = Modifier
             .padding(horizontal = 40.dp, vertical = 25.dp)
