@@ -83,18 +83,7 @@ fun HomePage(NavigateToCalculPage: () -> Unit) {
                 .fillMaxSize()
         ) {
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.15f),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Btn_Caroussel_Mode(level = Levels[0], scope = scope, pagerState = pagerState)
-                Btn_Caroussel_Mode(level = Levels[1], scope = scope, pagerState = pagerState)
-                Btn_Caroussel_Mode(level = Levels[2], scope = scope, pagerState = pagerState)
 
-            }
             Spacer(modifier = Modifier.weight(0.1f))
 
             HorizontalPager(
@@ -133,7 +122,21 @@ fun HomePage(NavigateToCalculPage: () -> Unit) {
                     )
                 }
             }
-            Spacer(modifier = Modifier.padding(40.dp))
+            Spacer(modifier = Modifier.padding(20.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.15f),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Btn_Caroussel_Mode(level = Levels[0], scope = scope, pagerState = pagerState)
+                Btn_Caroussel_Mode(level = Levels[1], scope = scope, pagerState = pagerState)
+                Btn_Caroussel_Mode(level = Levels[2], scope = scope, pagerState = pagerState)
+
+            }
+            Spacer(modifier = Modifier.padding(20.dp))
 
 
         }

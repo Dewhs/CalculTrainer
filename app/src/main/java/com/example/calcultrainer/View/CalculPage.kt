@@ -112,7 +112,7 @@ fun CalculPage(
                 )
 
             },
-            modifier = Modifier.padding(top = 80.dp)
+            modifier = Modifier.padding(top = 40.dp)
         )
 
 
