@@ -1,6 +1,5 @@
-package com.example.calcultrainer.View.theme
+package com.example.calcultrainer.ui.theme
 
-import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -31,33 +30,6 @@ val Heading2 = TextStyle(
     lineHeight = 24.sp,
     letterSpacing = 0.5.sp,
     color = Dark
-)
-
-val Heading2_Btn_Chill = TextStyle(
-    fontFamily = Poppins,
-    fontWeight = FontWeight.Medium,
-    fontSize = 18.sp,
-    lineHeight = 24.sp,
-    letterSpacing = 0.5.sp,
-    color = Chill_Dark
-)
-
-val Heading2_Btn_Training = TextStyle(
-    fontFamily = Poppins,
-    fontWeight = FontWeight.Medium,
-    fontSize = 18.sp,
-    lineHeight = 24.sp,
-    letterSpacing = 0.5.sp,
-    color = Training_Dark
-)
-
-val Heading2_Btn_Infinite = TextStyle(
-    fontFamily = Poppins,
-    fontWeight = FontWeight.Medium,
-    fontSize = 18.sp,
-    lineHeight = 24.sp,
-    letterSpacing = 0.5.sp,
-    color = Infinite_Dark
 )
 
 val ResultStyle = TextStyle(
@@ -108,7 +80,14 @@ val Heading4 = TextStyle(
 )
 
 
-
+val NavBarItemLabelStyle = TextStyle(
+    fontFamily = Poppins,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 12.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp,
+    //color = Dark
+)
 
 
 

@@ -1,4 +1,4 @@
-package com.example.calcultrainer.View
+package com.example.calcultrainer.ui
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseIn
@@ -54,21 +54,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.calcultrainer.Model.msgHistorique
 import com.example.calcultrainer.R
-import com.example.calcultrainer.View.theme.Chill
-import com.example.calcultrainer.View.theme.Dark
-import com.example.calcultrainer.View.theme.Heading1
-import com.example.calcultrainer.View.theme.Heading2
-import com.example.calcultrainer.View.theme.Heading3
-import com.example.calcultrainer.View.theme.Infinite
-import com.example.calcultrainer.View.theme.Light
-import com.example.calcultrainer.View.theme.LightGray
-import com.example.calcultrainer.View.theme.false_msgHistorique_H
-import com.example.calcultrainer.View.theme.true_msgHistorique_H
+import com.example.calcultrainer.ui.theme.Chill
+import com.example.calcultrainer.ui.theme.Dark
+import com.example.calcultrainer.ui.theme.Heading1
+import com.example.calcultrainer.ui.theme.Heading2
+import com.example.calcultrainer.ui.theme.Heading3
+import com.example.calcultrainer.ui.theme.Infinite
+import com.example.calcultrainer.ui.theme.Light
+import com.example.calcultrainer.ui.theme.LightGray
+import com.example.calcultrainer.ui.theme.false_msgHistorique_H
+import com.example.calcultrainer.ui.theme.true_msgHistorique_H
 import com.example.calcultrainer.ViewModel.CalculPageViewModel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.format.TextStyle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
