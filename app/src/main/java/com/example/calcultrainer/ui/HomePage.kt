@@ -1,6 +1,7 @@
 package com.example.calcultrainer.ui
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -39,11 +38,14 @@ import com.example.calcultrainer.ui.theme.Heading4
 import com.example.calcultrainer.ui.theme.Light
 import com.example.calcultrainer.Model.LevelDesc
 import com.example.calcultrainer.Model.Levels
+import com.example.calcultrainer.ui.customs.NoRippleInteractionSource
+import com.example.calcultrainer.ui.customs.advancedShadow
 import com.example.calcultrainer.ui.theme.Dark
 import com.example.calcultrainer.ui.theme.NavBarItemLabelStyle
 import kotlinx.coroutines.launch
 
 
+@SuppressLint("NewApi")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomePage(navigateToCalculPage: () -> Unit) {
@@ -95,12 +97,7 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
             Button(
                 modifier = Modifier
                     .padding(start = 40.dp, end = 40.dp)
-                    .fillMaxWidth().shadow(
-                        elevation = 15.dp,
-                        shape = RoundedCornerShape(30.dp),
-                        spotColor = currentMode.darkColor
-
-                    ),
+                    .fillMaxWidth(),
                 onClick = navigateToCalculPage,
                 colors = ButtonDefaults.buttonColors(currentMode.lightColor)
             ) {
@@ -127,13 +124,15 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
 
             // ------------------ TAB_BAR -------------------
             Column(
-                modifier = Modifier.fillMaxWidth().shadow(
-                    elevation = 15.dp,
-                    spotColor = currentMode.darkColor
-                )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .advancedShadow(
+                        color = currentMode.lightColor,
+                        alpha = 0.35f,
+                        shadowBlurRadius = 50.dp
+
+                    )
             ) {
-
-
                 NavigationBar(
                     containerColor = Light,
                     tonalElevation = 0.dp
@@ -141,6 +140,7 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
                     for ((index, lvlDesc) in Levels.withIndex()) {
                         val isSelected = pagerState.currentPage == index
                         NavigationBarItem(
+                            interactionSource = NoRippleInteractionSource(),
                             colors = NavigationBarItemDefaults.colors(
                                 indicatorColor = Color.White,
                                 selectedIconColor = currentMode.darkColor,
@@ -305,3 +305,7 @@ fun RankingLine(rank: Int, name: String, points: Int) {
     }
 
 }
+
+
+
+
