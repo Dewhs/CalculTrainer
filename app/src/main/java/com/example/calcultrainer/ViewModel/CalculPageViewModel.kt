@@ -1,7 +1,10 @@
 package com.example.calcultrainer.ViewModel
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
 import com.example.calcultrainer.Model.msgHistorique
+import com.example.calcultrainer.R
 import kotlin.random.Random
 
 class CalculPageViewModel() : ViewModel() {
@@ -13,10 +16,11 @@ class CalculPageViewModel() : ViewModel() {
     private var _correction: List<msgHistorique> = emptyList()
     private var _level : Int = 10
 
+
+
     init {
         launchParty()
     }
-
 
     val score: Int
         get() = _score
@@ -36,17 +40,17 @@ class CalculPageViewModel() : ViewModel() {
         get() = _level
 
 
-    fun checkResult(result: Int): Boolean {
-
+    fun checkResult(result: Int, context: Context): Boolean {
+        val mpSuccess = MediaPlayer.create(context, R.raw.success1)
         val checkValue = (result == realResult)
         println(checkValue)
         var newMsg: msgHistorique =
             msgHistorique(value = "$calcul = $result ", isTrue = checkValue, isCorrection = false)
         _correction += newMsg
         if (!checkValue) {
-            var newMsg1: msgHistorique = msgHistorique(
+            val newMsg1: msgHistorique = msgHistorique(
                 value = "$calcul = $realResult ",
-                isTrue = checkValue,
+                isTrue = false,
                 isCorrection = true
             )
             _correction += newMsg1
@@ -60,6 +64,8 @@ class CalculPageViewModel() : ViewModel() {
             if (_level < 100000)
             {
                 _level++
+                mpSuccess.start()
+
             }
         }
 

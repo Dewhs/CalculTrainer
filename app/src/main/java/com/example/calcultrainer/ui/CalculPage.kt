@@ -1,5 +1,6 @@
 package com.example.calcultrainer.ui
 
+import android.media.MediaPlayer
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.RepeatMode
@@ -29,7 +30,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -67,7 +68,7 @@ import com.example.calcultrainer.ui.theme.true_msgHistorique_H
 import com.example.calcultrainer.ViewModel.CalculPageViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CalculPage(
     navHostController: NavHostController,
@@ -84,12 +85,12 @@ fun CalculPage(
     val focusRequester = remember {
         FocusRequester()
     }
+
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(focusRequester) {
         focusRequester.requestFocus()
-
     }
-    
+
     Column(
         modifier = Modifier
             .padding(horizontal = 40.dp, vertical = 25.dp)
@@ -131,11 +132,10 @@ fun CalculPage(
 
             val size = viewModel.resultSize
 
-
-
-
+            val context = LocalContext.current
 
             BasicTextField(
+
                 value = result,
                 singleLine = true,
                 onValueChange = { newValue ->
@@ -143,16 +143,14 @@ fun CalculPage(
                         result = newValue
 
                         if (newValue.length == size) {
-                            equal = viewModel.checkResult(result.toInt())
+
+                            equal = viewModel.checkResult(result.toInt(), context)
                             result = ""
-
-
                             coroutineScope.launch {
                                 listSate.animateScrollToItem(index = listCorrection.size)
                             }
                         }
                     }
-
                 },
                 modifier = Modifier.focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -172,6 +170,7 @@ fun CalculPage(
                             borderSize = 3
                             isVisible = 1
                         }
+                        // ------------------ REPLY_BOX ------------------
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -187,14 +186,14 @@ fun CalculPage(
                                     .background(Light)
                             ) {
                                 Box(
-                                    modifier = Modifier.fillMaxSize(),
-
+                                    modifier = Modifier.fillMaxSize()
                                     ) {
                                     BasicText(
                                         text = nb, style = Heading1, modifier = Modifier.align(
                                             Alignment.BottomCenter
                                         )
                                     )
+                                    // ------------------ CUSTOM_CURSOR ------------------
                                     Box(
                                         modifier = Modifier
                                             .height(isVisible * 25.dp)
@@ -244,14 +243,11 @@ fun CalculPage(
                 horizontalAlignment = Alignment.End,
                 modifier = Modifier
                     .imePadding()
-                    //.align(Alignment.End)
                     .height(150.dp),
                 state = listSate,
             ) {
                 items(listCorrection) { _msgHistorique ->
-
-                    //BasicText(text = correct, style = Heading3)
-                    printMsgHistorique(msg = _msgHistorique)
+                    PrintMsgHistorique(msg = _msgHistorique)
                 }
             }
         }
@@ -260,7 +256,7 @@ fun CalculPage(
 
 
 @Composable
-fun printMsgHistorique(msg: msgHistorique) {
+fun PrintMsgHistorique(msg: msgHistorique) {
     var color: Color = LightGray
     var style: androidx.compose.ui.text.TextStyle = Heading3
 
@@ -286,20 +282,6 @@ fun printMsgHistorique(msg: msgHistorique) {
             modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
         )
     }
-
-    /*Box(
-        modifier = Modifier
-            .size(100.dp)
-            .border(
-                border = BorderStroke(1.dp, color),
-                RoundedCornerShape(100.dp)
-            )
-            .background(Color.Red)
-
-    )
-    {
-        BasicText(text = msg.value, style = style, modifier = Modifier.padding(10.dp))
-    }*/
-
-
 }
+
+

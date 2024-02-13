@@ -135,7 +135,6 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
             ) {
                 NavigationBar(
                     containerColor = Light,
-                    tonalElevation = 0.dp
                 ) {
                     for ((index, lvlDesc) in Levels.withIndex()) {
                         val isSelected = pagerState.currentPage == index
@@ -170,73 +169,10 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
                         )
                     }
                 }
-
             }
-
-            /*Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.15f),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Btn_Carousel_Mode(level = Levels[0], scope = scope, pagerState = pagerState)
-                Btn_Carousel_Mode(level = Levels[1], scope = scope, pagerState = pagerState)
-                Btn_Carousel_Mode(level = Levels[2], scope = scope, pagerState = pagerState)
-
-            }*/
-            //Spacer(modifier = Modifier.padding(20.dp))
-
-
         }
-
     }
 }
-
-
-/*@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun Btn_Carousel_Mode(
-    level: DC_Level,
-    scope: CoroutineScope,
-    pagerState: PagerState
-) {
-    var opacity = 0.5
-    var pageDestination = 0
-
-    if (Levels[pagerState.currentPage].name == level.name) {
-        opacity = 1.0
-    }
-
-    if (level.name == "Chill") {
-        pageDestination = 0
-    }
-    if (level.name == "Training") {
-        pageDestination = 1
-    }
-    if (level.name == "Infinite") {
-        pageDestination = 2 
-    }
-
-
-    Button(
-        modifier = Modifier
-            .alpha(opacity.toFloat()),
-        onClick = {
-            scope.launch {
-                pagerState.animateScrollToPage(pageDestination)
-            }
-        },
-        colors = ButtonDefaults.buttonColors(level.color)
-    ) {
-
-        Image(
-            painter = painterResource(id = level.path),
-            contentDescription = null
-        )
-    }
-}*/
-
 
 
 @Composable
