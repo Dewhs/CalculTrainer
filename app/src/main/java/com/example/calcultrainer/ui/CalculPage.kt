@@ -1,6 +1,6 @@
 package com.example.calcultrainer.ui
 
-import android.media.MediaPlayer
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.RepeatMode
@@ -39,14 +39,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -68,14 +66,17 @@ import com.example.calcultrainer.ui.theme.true_msgHistorique_H
 import com.example.calcultrainer.ViewModel.CalculPageViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalComposeUiApi::class)
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CalculPage(
     navHostController: NavHostController,
     viewModel: CalculPageViewModel = viewModel()
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
+    viewModel.initMp(context = LocalContext.current)
+
+    //val keyboardController = LocalSoftwareKeyboardController.current
     var result by remember { mutableStateOf("") }
+    var validated by remember { mutableStateOf(false) }
 
     var equal by remember { mutableStateOf(false) }
     val listSate = rememberLazyListState()
@@ -108,11 +109,9 @@ fun CalculPage(
                     painter = painterResource(id = R.drawable.left_arrow),
                     contentDescription = null
                 )
-
             },
             modifier = Modifier.padding(top = 40.dp)
         )
-
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -128,47 +127,47 @@ fun CalculPage(
             )
             Spacer(modifier = Modifier.size(25.dp))
 
-            //CustomNumberInput()
-
             val size = viewModel.resultSize
 
-            val context = LocalContext.current
-
             BasicTextField(
-
                 value = result,
                 singleLine = true,
                 onValueChange = { newValue ->
-                    if (newValue.length <= size && !newValue.contains(" ") && !newValue.contains("-") && !newValue.contains(",") && !newValue.contains(".")) {
+                    if (newValue.length <= size && !newValue.contains(" ") && !newValue.contains("-") && !newValue.contains(
+                            ","
+                        ) && !newValue.contains(".")
+                    ) {
                         result = newValue
-
                         if (newValue.length == size) {
-
-                            equal = viewModel.checkResult(result.toInt(), context)
-                            result = ""
+                            equal = viewModel.checkResult(result = result.toInt())
                             coroutineScope.launch {
                                 listSate.animateScrollToItem(index = listCorrection.size)
                             }
+                            validated = true
                         }
                     }
                 },
                 modifier = Modifier.focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             ) {
+                if (validated) {
+                    result = ""
+                    validated = false
+                }
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-
                     repeat(size) { index ->
-                        var borderSize = 1
-                        var isVisible = 0
+                        val borderSize = mutableStateOf(1)
+                        val isVisible = mutableStateOf(0)
                         val nb = when {
                             index >= result.length -> ""
                             else -> result[index].toString()
                         }
                         if (index == result.length) {
-                            borderSize = 3
-                            isVisible = 1
+                            borderSize.value = 3
+                            isVisible.value = 1
                         }
                         // ------------------ REPLY_BOX ------------------
                         Column(
@@ -178,7 +177,7 @@ fun CalculPage(
                             Box(
                                 modifier = Modifier
                                     .border(
-                                        BorderStroke(borderSize.dp, Dark),
+                                        BorderStroke(borderSize.value.dp, Dark),
                                         shape = RoundedCornerShape(30)
                                     )
                                     .height(50.dp)
@@ -187,7 +186,7 @@ fun CalculPage(
                             ) {
                                 Box(
                                     modifier = Modifier.fillMaxSize()
-                                    ) {
+                                ) {
                                     BasicText(
                                         text = nb, style = Heading1, modifier = Modifier.align(
                                             Alignment.BottomCenter
@@ -196,7 +195,7 @@ fun CalculPage(
                                     // ------------------ CUSTOM_CURSOR ------------------
                                     Box(
                                         modifier = Modifier
-                                            .height(isVisible * 25.dp)
+                                            .height(isVisible.value * 25.dp)
                                             .fillMaxWidth()
                                             .align(alignment = Alignment.BottomCenter)
 
@@ -226,17 +225,16 @@ fun CalculPage(
                 }
             }
         }
-
-        /*BasicText(
-            text = equal.toString(),
-            style = Heading4,
-            modifier = Modifier
-                .imePadding()
-                .align(Alignment.End)
-        )*/
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
-            BasicText(modifier = Modifier.imePadding(),text = "Level : ${viewModel.level}", style = Heading2)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            BasicText(
+                modifier = Modifier.imePadding(),
+                text = "Level : ${viewModel.level}",
+                style = Heading2
+            )
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -283,5 +281,4 @@ fun PrintMsgHistorique(msg: msgHistorique) {
         )
     }
 }
-
 

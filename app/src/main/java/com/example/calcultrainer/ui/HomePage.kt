@@ -41,8 +41,10 @@ import com.example.calcultrainer.Model.Levels
 import com.example.calcultrainer.ui.customs.NoRippleInteractionSource
 import com.example.calcultrainer.ui.customs.advancedShadow
 import com.example.calcultrainer.ui.theme.Dark
+import com.example.calcultrainer.ui.theme.LightGray
 import com.example.calcultrainer.ui.theme.NavBarItemLabelStyle
 import kotlinx.coroutines.launch
+import java.util.logging.Level
 
 
 @SuppressLint("NewApi")
@@ -73,7 +75,6 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
             BasicText(text = "Calcul Trainer", style = Heading1)
         }
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,14 +103,13 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
                 colors = ButtonDefaults.buttonColors(currentMode.lightColor)
             ) {
                 Row(
-                    modifier = Modifier
-                        .padding(top = 5.dp, bottom = 5.dp),
+                    modifier = Modifier.padding(vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
                         painter = painterResource(id = currentMode.playPath),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(currentMode.darkColor)
+                        colorFilter = ColorFilter.tint(currentMode.darkColor),
+                        contentDescription = "start button",
                     )
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(
@@ -122,52 +122,48 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
             }
             Spacer(modifier = Modifier.padding(40.dp))
 
-            // ------------------ TAB_BAR -------------------
-            Column(
+            // ------------------ NAV_BOTTOM_BAR -------------------
+            NavigationBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .advancedShadow(
-                        color = currentMode.lightColor,
-                        alpha = 0.35f,
+                        color = currentMode.darkColor,
+                        alpha = 0.15f,
                         shadowBlurRadius = 50.dp
-
-                    )
+                    ),
+                containerColor = Light,
             ) {
-                NavigationBar(
-                    containerColor = Light,
-                ) {
-                    for ((index, lvlDesc) in Levels.withIndex()) {
-                        val isSelected = pagerState.currentPage == index
-                        NavigationBarItem(
-                            interactionSource = NoRippleInteractionSource(),
-                            colors = NavigationBarItemDefaults.colors(
-                                indicatorColor = Color.White,
-                                selectedIconColor = currentMode.darkColor,
-                                selectedTextColor = currentMode.darkColor,
-                                unselectedIconColor = Dark,
-                                unselectedTextColor = Dark
-                            ),
-                            selected = isSelected,
-                            onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(index)
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = lvlDesc.path),
-                                    contentDescription = null,
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = lvlDesc.name,
-                                    style = NavBarItemLabelStyle,
-                                )
-                            },
-                            alwaysShowLabel = false
-                        )
-                    }
+                for ((index, lvlDesc) in Levels.withIndex()) {
+                    val isSelected = pagerState.currentPage == index
+                    NavigationBarItem(
+                        interactionSource = NoRippleInteractionSource(),
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Light,
+                            selectedIconColor = currentMode.darkColor,
+                            selectedTextColor = currentMode.darkColor,
+                            unselectedIconColor = Dark,
+                            unselectedTextColor = Dark
+                        ),
+                        selected = isSelected,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = lvlDesc.path),
+                                contentDescription = null,
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = lvlDesc.name,
+                                style = NavBarItemLabelStyle,
+                            )
+                        },
+                        alwaysShowLabel = false
+                    )
                 }
             }
         }
@@ -181,34 +177,29 @@ fun PresBody(level: LevelDesc) {
         modifier = Modifier
             .fillMaxSize()
             .padding(start = 40.dp, end = 40.dp),
-        verticalArrangement = Arrangement.spacedBy(35.dp)
     ) {
-        //DESCRIPTION
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            BasicText(text = "Description", style = Heading1)
-            BasicText(
-                text = level.description,
-                style = Heading4
-            )
-        }
+        BasicText(text = "Description", style = Heading1)
+        BasicText(
+            text = level.description,
+            style = Heading4
+        )
 
-        //RANK
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            BasicText(text = "Rank", style = Heading1)
-            Top3Ranking()
+        Spacer(modifier = Modifier.size(35.dp))
+        when(level.name){
+            "Chill" -> {
+                BasicText(text = "Stats", style = Heading1)
+            }
+            "Infinite" -> {
+                BasicText(text = "Rank", style = Heading1)
+                Top3Ranking()
+            }
+            "Multiplayer" -> {
+                BasicText(text = "Last game ranking", style = Heading1)
+                Top3Ranking()
+            }
         }
-
     }
 }
-
 
 @Composable
 fun Top3Ranking() {
@@ -216,11 +207,9 @@ fun Top3Ranking() {
         modifier = Modifier
             .padding(20.dp),
     ) {
-
         RankingLine(rank = 1, name = "Albert", points = 2541)
         RankingLine(rank = 2, name = "Kaarismmmaticc", points = 2538)
         RankingLine(rank = 3, name = "Robert", points = 2213)
-
     }
 }
 

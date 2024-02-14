@@ -14,8 +14,7 @@ class CalculPageViewModel() : ViewModel() {
     private var _realResult = 9
     private var _resultSize = 1
     private var _correction: List<msgHistorique> = emptyList()
-    private var _level : Int = 10
-
+    private var _level : Int = 1
 
 
     init {
@@ -39,12 +38,20 @@ class CalculPageViewModel() : ViewModel() {
     val level: Int
         get() = _level
 
+    private lateinit var mpSuccess:MediaPlayer;
+    private lateinit var mpFail:MediaPlayer;
 
-    fun checkResult(result: Int, context: Context): Boolean {
-        val mpSuccess = MediaPlayer.create(context, R.raw.success1)
+
+    fun initMp(context: Context){
+        mpSuccess = MediaPlayer.create(context, R.raw.success1)
+        mpFail = MediaPlayer.create(context, R.raw.wrong1)
+    }
+
+    fun checkResult(result: Int): Boolean {
+
         val checkValue = (result == realResult)
         println(checkValue)
-        var newMsg: msgHistorique =
+        val newMsg: msgHistorique =
             msgHistorique(value = "$calcul = $result ", isTrue = checkValue, isCorrection = false)
         _correction += newMsg
         if (!checkValue) {
@@ -56,6 +63,7 @@ class CalculPageViewModel() : ViewModel() {
             _correction += newMsg1
             if (_level > 1)
             {
+                mpFail.start()
                 _level--
             }
 
@@ -63,8 +71,8 @@ class CalculPageViewModel() : ViewModel() {
         else{
             if (_level < 100000)
             {
-                _level++
                 mpSuccess.start()
+                _level++
 
             }
         }
