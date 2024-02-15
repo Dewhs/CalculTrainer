@@ -68,7 +68,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun CalculPage(
+fun ChillPage(
     navHostController: NavHostController,
     viewModel: CalculPageViewModel = viewModel()
 ) {
@@ -235,7 +235,6 @@ fun CalculPage(
                 text = "Level : ${viewModel.level}",
                 style = Heading2
             )
-
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 horizontalAlignment = Alignment.End,

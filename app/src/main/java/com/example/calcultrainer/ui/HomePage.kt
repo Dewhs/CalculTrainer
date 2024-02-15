@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.calcultrainer.R
 import com.example.calcultrainer.ui.theme.Heading1
 import com.example.calcultrainer.ui.theme.Heading2
@@ -50,7 +51,8 @@ import java.util.logging.Level
 @SuppressLint("NewApi")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomePage(navigateToCalculPage: () -> Unit) {
+//fun HomePage(navigateToCalculPage: () -> Unit) {
+fun HomePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
 
@@ -99,7 +101,10 @@ fun HomePage(navigateToCalculPage: () -> Unit) {
                 modifier = Modifier
                     .padding(start = 40.dp, end = 40.dp)
                     .fillMaxWidth(),
-                onClick = navigateToCalculPage,
+                onClick = {
+                    println("Path : ${currentMode.pathToPage}")
+                    navController.navigate(currentMode.pathToPage)
+                    },
                 colors = ButtonDefaults.buttonColors(currentMode.lightColor)
             ) {
                 Row(

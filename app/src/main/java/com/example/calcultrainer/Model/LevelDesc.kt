@@ -11,7 +11,7 @@ import com.example.calcultrainer.ui.theme.Infinite_Dark
 import com.example.calcultrainer.ui.theme.Multiplayer
 import com.example.calcultrainer.ui.theme.Multiplayer_Dark
 
-data class LevelDesc(val name: String, val description: String, val lightColor: Color, val darkColor: Color, val path: Int, val playPath: Int = R.drawable.play, val textStyle : TextStyle = Heading2)
+data class LevelDesc(val name: String, val description: String, val lightColor: Color, val darkColor: Color, val path: Int, val playPath: Int = R.drawable.play, val textStyle : TextStyle = Heading2, val pathToPage: String)
 
 
 val Levels = listOf(
@@ -21,6 +21,7 @@ val Levels = listOf(
         lightColor = Chill,
         darkColor = Chill_Dark,
         path = R.drawable.flower_icon,
+        pathToPage = "chillPage"
     ),
     /*LevelDesc(
         name = "Training",
@@ -35,6 +36,7 @@ val Levels = listOf(
         lightColor = Infinite,
         darkColor = Infinite_Dark,
         path = R.drawable.flamme_icon,
+        pathToPage = "infinitePage"
     ),
     LevelDesc(
         name = "Multiplayer",
@@ -42,5 +44,6 @@ val Levels = listOf(
         lightColor = Multiplayer,
         darkColor = Multiplayer_Dark,
         path = R.drawable.network_icon,
+        pathToPage = "multiplayerPage"
     ),
 )
