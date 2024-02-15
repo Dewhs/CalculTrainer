@@ -21,10 +21,10 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "home"){
                 //composable("home") { HomePage(navigateToCalculPage = {navController.navigate("calculPage")})}
-                composable("home") { HomePage(navController)}
+                composable("home") {HomePage(navController)}
                 composable("chillPage") {ChillPage(navController)}
-                composable("infinitePage") { InifitePage(navController) }
-                composable("multiplayerPage") { MultiplayerPage(navController) }
+                composable("infinitePage") {InifitePage(navController) }
+                composable("multiplayerPage") {MultiplayerPage(navController)}
             }
         }
     }
