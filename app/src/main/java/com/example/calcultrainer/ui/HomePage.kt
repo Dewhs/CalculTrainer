@@ -193,6 +193,14 @@ fun PresBody(level: LevelDesc) {
         when(level.name){
             "Chill" -> {
                 BasicText(text = "Stats", style = Heading1)
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    BasicText(text = "The graph showing the evolution of levels is coming soon!")
+                }
+
             }
             "Infinite" -> {
                 BasicText(text = "Rank", style = Heading1)

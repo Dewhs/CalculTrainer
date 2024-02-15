@@ -17,7 +17,7 @@ data class LevelDesc(val name: String, val description: String, val lightColor: 
 val Levels = listOf(
     LevelDesc(
         name = "Chill",
-        description = "The Chill game mode is designed for a short session in a more relaxed format, and without a timer.",
+        description = "The Chill game mode is designed for more relaxed, timer-free sessions.",
         lightColor = Chill,
         darkColor = Chill_Dark,
         path = R.drawable.flower_icon,
